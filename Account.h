@@ -8,7 +8,7 @@ class Account {
 private:
     string accountNumber;
     double balance;
-    Transaction* transactions[50];  
+    Transaction** transactions;  
     int transactionCount;
 public:
     Account(string accNo, double initialBalance);
@@ -19,7 +19,8 @@ public:
     double getBalance();
     void printMiniStatement();
     void addTransaction(Transaction* t);
-    void saveToFile();
+    void saveToFile(){
+    }
     void loadFromFile();
 };
 #endif

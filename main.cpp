@@ -30,7 +30,7 @@ class Account {
 private:
     string accountNumber;
     double balance;
-    Transaction* transactions[50];  // array of pointers meaning aggregation
+    Transaction** transactions;  // array of pointers meaning aggregation
     int transactionCount;
 public:
     Account(string accNo, double initialBalance);
