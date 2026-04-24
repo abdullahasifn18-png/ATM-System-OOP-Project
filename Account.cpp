@@ -3,10 +3,11 @@
 #include <iostream>      
 #include <fstream>
 
-    Account::Account(string accNo, double initialBalance){
+    Account::Account(string accNo, double initialBalance,User *u){
         accountNumber=accNo;
         balance=initialBalance;
         transactionCount=0;
+        user=u;
     }
     Account::~Account(){
         delete [] transactions;
@@ -65,7 +66,11 @@
     
     string id;
     if (infile.is_open()) {
-        while (infile >> id) {
+        while (!infile.eof()) {
+            infile>>id;
+            if(!infile){
+                break;
+            }
             if (id != accountNumber) {
                 
                 float t_bal;
@@ -136,4 +141,7 @@
         }
     }
     infile.close();
+    }
+    User* Account:: getuser(){
+        return user;
     }

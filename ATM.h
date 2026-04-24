@@ -12,9 +12,9 @@ using namespace std;
 class ATM {
 private:
     User *currentUser;
-    Account *accounts[100];
+    Account **accounts;
     int accountCount;
-    double cashAvailable;
+    float cashAvailable;
     ofstream logFile;
 
 public:

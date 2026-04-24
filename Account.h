@@ -2,16 +2,17 @@
 #define ACCOUNT_H
 #include<iostream>
 using namespace std;
-
+class User;
 class Transaction;
 class Account {
 private:
     string accountNumber;
     double balance;
-    Transaction** transactions;  
+    Transaction** transactions; 
+    User *user; 
     int transactionCount;
 public:
-    Account(string accNo, double initialBalance);
+    Account(string accNo, double initialBalance,User *u);
     ~Account();
     void deposit(double amount);
     bool withdraw(double amount);
@@ -22,5 +23,6 @@ public:
     void saveToFile(){
     }
     void loadFromFile();
+    User* getuser();
 };
 #endif
