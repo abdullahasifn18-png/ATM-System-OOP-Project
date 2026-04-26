@@ -83,6 +83,7 @@ void ATM::processTransaction(int choice){
         cin>>amount;
         
         source->deposit(amount);
+      logTransaction(source, new Deposit(amount));
         source->saveToFile();
           }
     }
@@ -102,6 +103,7 @@ void ATM::processTransaction(int choice){
         cin>>amount;
         
         source->withdraw(amount);
+        logTransaction(source, new Withdraw(amount));
         source->saveToFile();
           }
     }
@@ -134,6 +136,11 @@ void ATM::processTransaction(int choice){
         cout<<"Enter Ammount to Transfer"<<endl;
         cin>>amount;
         source->transfer(destination,amount);
+        
+        logTransaction(source, new Withdraw(amount));
+        logTransaction(destination, new Deposit(amount));
+        source->saveToFile();
+        destination->saveToFile();
         }
     }
     else if(choice==5){
@@ -154,4 +161,34 @@ void ATM::processTransaction(int choice){
     else{
         cout<<"Invalid choice"<<endl;
     }
+}
+void ATM::saveAccounts() {
+    for (int i = 0; i < accountCount; i++) {
+        (*(accounts + i))->saveToFile(); 
+    }
+}
+void ATM::logTransaction(Account* source,Transaction *t){
+source->addTransaction(t);
+
+}
+void ATM::loadAccounts(){
+    ifstream infile("accounts_record.txt");
+    if(!infile.open()){
+        cout<<"file not found"<<endl;
+    }
+    else{
+        
+    }
+}
+void ATM::refillCash(double amount){
+    if(amount<0){
+        cout<<"Invalid amount"<<endl;
+        return;
+    }
+    else{
+        cashAvailable=cashAvailable+amount;
+    }
+}
+double ATM::getCashAvailable(){
+    return cashAvailable;
 }

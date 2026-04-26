@@ -3,8 +3,9 @@
 #include <iostream>      
 #include <fstream>
 
-    Account::Account(string accNo, double initialBalance,User *u){
+    Account::Account(string accNo,string holderName, double initialBalance,User *u){
         accountNumber=accNo;
+        this->holdername=holderName;
         balance=initialBalance;
         transactionCount=0;
         user=u;
@@ -49,6 +50,19 @@
     double Account::getBalance(){
          return balance;
     }
+    string Account::getAccountNumber(){
+        return accountNumber;
+    }
+    string Account::getHolderName(){
+        return holdername;
+    }
+    bool Account::getIsActive() {
+    return status;
+}
+
+void Account::setIsActive(bool status) {
+    this->status = status;
+}
     void Account::printMiniStatement(){
         for(int i=0;i<transactionCount;i++){
             if(*(transactions+i)!=nullptr){
@@ -57,7 +71,15 @@
     }
     }
     void Account::addTransaction(Transaction* t){
-    *(transactions + transactionCount) = t;
+    Transaction** temp = new Transaction*[transactionCount + 1];
+
+    for (int i = 0; i < transactionCount; i++) {
+        *(temp + i) = *(transactions + i);
+    }
+
+    *(temp + transactionCount) = t;
+    delete[] transactions;
+    transactions = temp;
     transactionCount++;
     }
  void Account::saveToFile() {
@@ -144,4 +166,7 @@
     }
     User* Account:: getuser(){
         return user;
+    }
+    void Account::showBalance(){
+        cout<<"Current balance is "<<balance<<endl;
     }

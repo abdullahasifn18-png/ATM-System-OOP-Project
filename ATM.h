@@ -14,7 +14,7 @@ private:
     User *currentUser;
     Account **accounts;
     int accountCount;
-    float cashAvailable;
+    double cashAvailable;
     ofstream logFile;
 
 public:
@@ -28,7 +28,7 @@ public:
 
     void loadAccounts();
     void saveAccounts();
-    void logTransaction(Transaction *t);
+    void logTransaction(Account *source,Transaction *t);
     void refillCash(double amount);
     double getCashAvailable();
 };
