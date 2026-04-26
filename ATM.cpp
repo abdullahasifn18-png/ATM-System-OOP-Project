@@ -64,7 +64,7 @@ void ATM::processTransaction(int choice){
     }
     else if(choice==2){
         double amount;
-        cout << "Enter amount to deposit: ";
+        cout << "Enter amount to deposit "<<endl;
         cin >> amount;
         
         currentAccount->deposit(amount);
@@ -73,7 +73,7 @@ void ATM::processTransaction(int choice){
     }
     else if(choice==3){
          double amount;
-        cout << "Enter amount to withdraw: ";
+        cout << "Enter amount to withdraw "<<endl;
         cin >> amount;
         
         currentAccount->withdraw(amount);
@@ -82,7 +82,7 @@ void ATM::processTransaction(int choice){
           }
     else if(choice==4){
         string target;
-        cout << "Enter destination account Number: ";
+        cout << "Enter destination account Number "<<endl;
         cin >> target;
         Account* destination = nullptr;
         for (int i = 0; i < count; i++) {
@@ -93,14 +93,14 @@ void ATM::processTransaction(int choice){
         }
 
         if (destination == nullptr) {
-            cout << "Destination account not found." << endl;
+            cout << "Destination account not found" << endl;
         }
         else if (currentAccount == destination) {
             cout << "cannot transfer to yourself" << endl;
         }
         else {
             double amount;
-            cout << "Enter amount to transfer ";
+            cout << "Enter amount to transfer "<<endl;
             cin >> amount;
             currentAccount->transfer(destination, amount);
             logTransaction(currentAccount, new Withdraw(amount));
