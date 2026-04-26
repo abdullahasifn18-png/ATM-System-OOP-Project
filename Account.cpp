@@ -133,6 +133,12 @@ void Account::setIsActive(bool status) {
         if(!infile){
             return;
         }
+        for (int i = 0; i < transactionCount; i++) {
+        delete transactions[i];
+    }
+    delete[] transactions;
+    transactions = nullptr;
+    transactionCount = 0;
         while(!infile.eof()){
             string id;
             infile>>id;
@@ -144,7 +150,6 @@ void Account::setIsActive(bool status) {
                 int tempcount;
                 infile>>balance;
                 infile>>tempcount;
-                transactionCount=0;
                 for (int i = 0; i < tempcount; i++) {
                 float amt;
                 infile>>amt;
@@ -163,9 +168,6 @@ void Account::setIsActive(bool status) {
         }
     }
     infile.close();
-    }
-    User* Account:: getuser(){
-        return user;
     }
     void Account::showBalance(){
         cout<<"Current balance is "<<balance<<endl;

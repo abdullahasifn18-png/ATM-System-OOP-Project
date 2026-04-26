@@ -29,7 +29,6 @@ public:
     void saveToFile(){
     }
     void loadFromFile();
-    User* getuser();
       void showBalance();  
 };
 #endif

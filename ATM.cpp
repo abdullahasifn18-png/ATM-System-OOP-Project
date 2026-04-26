@@ -1,14 +1,19 @@
 #include "ATM.h"
 
 ATM::ATM(){
-    currentUser=nullptr;
+    currentAccount=nullptr;
     accounts=nullptr;
-    accountCount=0;
+    count=0;
     cashAvailable=0;
 }
 ATM::~ATM(){
-    delete [] accounts;
-    logFile.close();
+    for (int i = 0; i < count; i++) {
+        delete *(accounts+i); 
+    }
+    delete[] accounts; 
+    if (logFile.is_open()) {
+        logFile.close();
+    }
 }
 void ATM::run(){
     loadAccounts();
@@ -31,7 +36,7 @@ void ATM::run(){
        cin>>choice;
        if(choice==-1){
         ch=0;
-        currentUser=nullptr;
+        currentAccount=nullptr;
        }
        else{
        processTransaction(choice);
@@ -39,12 +44,13 @@ void ATM::run(){
 }}
 }
 bool ATM::authenticate(string accNo, string pin){
-    for(int i=0;i<accountCount;i++){
+    currentAccount=nullptr;
+    for(int i=0;i<count;i++){
         if(*(accounts+i)!=nullptr){
             string temp=(*(accounts+i))->getAccountNumber();
             bool ch=(*(accounts+i))->verifyPin(pin);
             if(ch==1&&accNo==temp){
-                currentUser=(*(accounts+i))->getuser();
+                currentAccount=(*(accounts+i));
                 return true;
             }
 
@@ -54,116 +60,66 @@ bool ATM::authenticate(string accNo, string pin){
 }
 void ATM::processTransaction(int choice){
     if(choice==1){
-        Account *source=nullptr;
-         for(int i=0;i<accountCount;i++){
-          if(currentUser==(*(accounts+i))->getAccount()){
-            source=*(accounts+i);
-            break;
-          }}
-          if(source==nullptr){
-            cout<<"Account not found"<<endl;
-          }
-          else{
-            cout<<"Current Balance is "<<source->getBalance()<<endl;
-          }
+        cout << "Current Balance is " << currentAccount->getBalance() << endl;
     }
     else if(choice==2){
-         Account *source=nullptr;
-         for(int i=0;i<accountCount;i++){
-          if(currentUser==(*(accounts+i))->getAccount()){
-            source=*(accounts+i);
-            break;
-          }}
-          if(source==nullptr){
-            cout<<"Account not found"<<endl;
-          }
-          else{
         double amount;
-        cout<<"Enter amount to deposit"<<endl;
-        cin>>amount;
+        cout << "Enter amount to deposit: ";
+        cin >> amount;
         
-        source->deposit(amount);
-      logTransaction(source, new Deposit(amount));
-        source->saveToFile();
-          }
+        currentAccount->deposit(amount);
+        logTransaction(currentAccount, new Deposit(amount));
+        currentAccount->saveToFile();
     }
     else if(choice==3){
-          Account *source=nullptr;
-         for(int i=0;i<accountCount;i++){
-          if(currentUser==(*(accounts+i))->getAccount()){
-            source=*(accounts+i);
-            break;
-          }}
-          if(source==nullptr){
-            cout<<"Account not found"<<endl;
-          }
-          else{
-        double amount;
-        cout<<"Enter amount to withdraw"<<endl;
-        cin>>amount;
+         double amount;
+        cout << "Enter amount to withdraw: ";
+        cin >> amount;
         
-        source->withdraw(amount);
-        logTransaction(source, new Withdraw(amount));
-        source->saveToFile();
+        currentAccount->withdraw(amount);
+        logTransaction(currentAccount, new Withdraw(amount));
+        currentAccount->saveToFile();
           }
-    }
     else if(choice==4){
-        string temp;
-        cout<<"Enter account Number"<<endl;
-        cin>>temp;
-        Account* source=nullptr;
-        Account*destination=nullptr;
-        for(int i=0;i<accountCount;i++){
-          if(currentUser==(*(accounts+i))->getAccount()){
-            source=*(accounts+i);
-            break;
-          }
+        string target;
+        cout << "Enter destination account Number: ";
+        cin >> target;
+        Account* destination = nullptr;
+        for (int i = 0; i < count; i++) {
+            if ((*(accounts + i))->getAccountNumber() == target) {
+                destination = *(accounts + i);
+                break;
+            }
         }
-         for(int i=0;i<accountCount;i++){
-          if(temp==(*(accounts+i))->getAccountNumber()){
-            destination=*(accounts+i);
-            break;
-          }
+
+        if (destination == nullptr) {
+            cout << "Destination account not found." << endl;
         }
-        if(source==nullptr||destination==nullptr){
-            cout<<"Transaction error as account wasnt found"<<endl;
+        else if (currentAccount == destination) {
+            cout << "cannot transfer to yourself" << endl;
         }
-        else if(source==destination){
-            cout<<"cant transfer to same account"<<endl;
-        }
-        else{
-        double amount;
-        cout<<"Enter Ammount to Transfer"<<endl;
-        cin>>amount;
-        source->transfer(destination,amount);
-        
-        logTransaction(source, new Withdraw(amount));
-        logTransaction(destination, new Deposit(amount));
-        source->saveToFile();
-        destination->saveToFile();
+        else {
+            double amount;
+            cout << "Enter amount to transfer ";
+            cin >> amount;
+            currentAccount->transfer(destination, amount);
+            logTransaction(currentAccount, new Withdraw(amount));
+            logTransaction(destination, new Deposit(amount));
+            
+            currentAccount->saveToFile();
+            destination->saveToFile();
         }
     }
     else if(choice==5){
-        Account *source=nullptr;
-         for(int i=0;i<accountCount;i++){
-          if(currentUser==(*(accounts+i))->getAccount()){
-            source=*(accounts+i);
-            break;
-          }}
-          if(source==nullptr){
-            cout<<"Account not found"<<endl;
-          }
-          else{
             cout<<"Printing mini statement"<<endl;
-            source->printMiniStatement();
-          }
-    }
-    else{
-        cout<<"Invalid choice"<<endl;
-    }
+            currentAccount->printMiniStatement();
+     
+}else{
+    cout<<"Invalid choice"<<endl;
+}
 }
 void ATM::saveAccounts() {
-    for (int i = 0; i < accountCount; i++) {
+    for (int i = 0; i < count; i++) {
         (*(accounts + i))->saveToFile(); 
     }
 }
@@ -171,14 +127,48 @@ void ATM::logTransaction(Account* source,Transaction *t){
 source->addTransaction(t);
 
 }
-void ATM::loadAccounts(){
-    ifstream infile("accounts_record.txt");
-    if(!infile.open()){
-        cout<<"file not found"<<endl;
+void ATM::loadAccounts() {
+    ifstream infile("account_record.txt");
+    if (!infile) {
+        return;
     }
-    else{
+
+    count = 0;
+    accounts = nullptr;
+
+    while (!infile.eof()) {
+        string id;
+        float bal;
+        int t_count;
+
+        infile >> id;
+        if (id == "") {
+            break;
+        }
+
+        infile >> bal >> t_count;
+
+        Account** temp = new Account*[count + 1];
+
+        for (int i = 0; i < count; i++) {
+            *(temp+i) = *(accounts+i);
+        }
+
+        *(temp+count) = new Account(id, "User", bal, nullptr);
         
+        for (int j = 0; j < t_count; j++) {
+            float dummy;
+            infile >> dummy;
+        }
+
+        delete[] accounts;
+        accounts = temp;
+        
+        accounts[count]->loadFromFile();
+
+        count++;
     }
+    infile.close();
 }
 void ATM::refillCash(double amount){
     if(amount<0){

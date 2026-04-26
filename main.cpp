@@ -83,7 +83,6 @@ public:
     void saveToFile();
     void loadFromFile();
     void showBalance();  
-    User* getuser();
 };
 //---------------------------------------------------------------------------------
 class Transaction//abstract base, cant make a transaction obj directly
@@ -142,9 +141,9 @@ public:
 class ATM
 {
 private:
-    User* currentUser;//aggregation
+    Account* currentAccount;//aggregation
     Account** accounts;//aggregation
-    int accountCount;
+    int count;
     double cashAvailable;
     ofstream logFile;
 

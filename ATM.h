@@ -11,9 +11,9 @@ using namespace std;
 
 class ATM {
 private:
-    User *currentUser;
+    Account *currentAccount;
     Account **accounts;
-    int accountCount;
+    int count;
     double cashAvailable;
     ofstream logFile;
 
