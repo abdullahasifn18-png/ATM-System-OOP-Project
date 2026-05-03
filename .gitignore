@@ -10,3 +10,5 @@ atm_system
 *.out
 .DS_Store
 account_record.txt
+*.zip
+zipProject/
