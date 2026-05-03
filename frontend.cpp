@@ -88,7 +88,7 @@ typedef struct
 } TxRecord;
 
 // -- App State --
-typedef struct
+typedef struct AppState_t
 {
     Screen screen;
     Screen prevScreen;
@@ -212,8 +212,6 @@ SetMasterVolume(1.0);
 
         DrawRectangle(30, 30, SCREEN_W - 60, 50, CLR_DIMMER);
         DrawRectangleLinesEx((Rectangle){30, 30, (float)SCREEN_W - 60, 50}, 1, CLR_BORDER);
-        //DrawTextEx(font, "GreenBank ATM  v2.4.1", (Vector2){50, 45}, 16, 1, CLR_DIM);
-        DrawTextEx(font, "FAST-NUCES Secure Banking Terminal", (Vector2){45, 45}, 16, 1, CLR_DIM);
         char tstr[32];
         int sec = (int)s.time % 60, mn = ((int)s.time / 60) % 60;
         snprintf(tstr, sizeof(tstr), "SESSION %02d:%02d", mn, sec);
@@ -415,7 +413,7 @@ void DrawWelcome(AppState *s, Font font)
 // 1. Sign In / Sign Up Screen
 void DrawAuth(AppState *s, Font font)
 {
-    DrawCenteredText(font, "WELCOME TO ATM", 210, 32, CLR_GREEN);
+    DrawCenteredText(font, "WELCOME TO PAISA EXPRESS", 210, 32, CLR_GREEN);
     DrawCenteredText(font, "PLEASE CHOOSE AN OPTION", 268, 18, CLR_WHITE);
     if (IsButtonPressed(BTN_X, 340, BTN_W, BTN_H))
        { s->screen = SCR_ROLE;
