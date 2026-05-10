@@ -7,13 +7,13 @@
 string encryptPin(const string &pin)
 {
     string result = pin;
-    for (char &c : result)
-        c = c ^ 0x5A; // XOR key 0x5A
+    for (int i = 0; i < 4; i++)
+        result[i] = result[i] ^ 5;//xor
     return result;
 }
 string decryptPin(const string &pin)
 {
-    return encryptPin(pin); // XOR is symmetric
+    return encryptPin(pin); // xor is symmetric
 }
 
 Account::Account(string accNo, string holderName, int initialBalance)

@@ -412,7 +412,7 @@ void DrawWelcome(AppState *s, Font font)
 // 1. Sign In / Sign Up Screen
 void DrawAuth(AppState *s, Font font)
 {
-    DrawCenteredText(font, "WELCOME TO ATM", 210, 32, CLR_GREEN);
+    DrawCenteredText(font, "WELCOME TO PAISA EXPRESS", 210, 32, CLR_WHITE);
     DrawCenteredText(font, "PLEASE CHOOSE AN OPTION", 268, 18, CLR_WHITE);
     if (IsButtonPressed(BTN_X, 340, BTN_W, BTN_H))
     {

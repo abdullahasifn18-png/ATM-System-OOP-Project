@@ -14,7 +14,7 @@ private:
     int balance;
     int failedAttempts;
     bool isLocked;
-    Transaction **transactions;
+    Transaction **transactions;//array of pointers
     User *user;
     int transactionCount;
     string pin;

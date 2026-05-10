@@ -1,7 +1,7 @@
 #include "RegisteredUser.h"
 
 RegisteredUser::RegisteredUser(string n, string acc, string p, Account *a)
-    : User(n, acc, p)
+    : User(n, acc, p)//in child can make obj
 {
     account = a;
 }

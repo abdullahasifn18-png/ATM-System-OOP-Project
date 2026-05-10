@@ -3,7 +3,7 @@
 using namespace std;
 
 Deposit::Deposit(double amount, string src) : Transaction("Deposit", amount) {
-    this->source = src;
+    source = src;
 }
 void Deposit::execute(Account* acc) {
     acc->deposit(this->amount);

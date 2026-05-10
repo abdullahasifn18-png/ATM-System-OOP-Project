@@ -14,7 +14,7 @@ void Transfer::execute(Account *acc)
         cout << "Transfer Error: RECIPIENT OBJ IS NULL" << endl;
         return;
     }
-    bool success = acc->transfer(this->targetAccount, this->amount);
+    bool success = acc->transfer(this->targetAccount, this->amount);//calls func of account classs
 
     if (success)
     {
